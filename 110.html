@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf8">
     <style>
         .arc text {
             font: 10px sans-serif;
@@ -44,7 +45,7 @@
                       .outerRadius(radius)
                       .innerRadius(radius - 80);
 
-        d3.csv("xyz.csv", function(error, data) {
+        d3.csv("browseruse.csv", function(error, data) {
             if (error) {
                 throw error;
             }
@@ -67,9 +68,9 @@
             });
 
             svg.append("g")
-               .attr("transform", "translate(" + (width / 2 - 120) + "," + 20 + ")")
+               .attr("transform", "translate(" + (300) + "," 200 ")")
                .append("text")
-               .text("Browser use statistics - Jan 2017")
+               .text("北市票倉 - Jan 2017")
                .attr("class", "title")
     </script>
 </body>
