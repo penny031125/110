@@ -1,77 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf8">
-    <style>
-        .arc text {
-            font: 10px sans-serif;
-            text-anchor: middle;
-        }
-
-        .arc path {
-            stroke: #fff;
-        }
-
-        .title {
-            fill: teal;
-            font-weight: bold;
-        }
-    </style>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-</head>
-<body>
-    <svg width="500" height="400"></svg>
-    <script>
-
-        var svg = d3.select("svg"),
-            width = svg.attr("width"),
-            height = svg.attr("height"),
-            radius = Math.min(width, height) / 2;
-        
-        var g = svg.append("g")
-                   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-        var color = d3.scaleOrdinal(['#4daf4a','#377eb8','#ff7f00','#984ea3','#e41a1c']);
-
-        var pie = d3.pie().value(function(d) { 
-                return d.percent; 
-            });
-
-        var path = d3.arc()
-                     .outerRadius(radius - 10)
-                     .innerRadius(0);
-
-        var label = d3.arc()
-                      .outerRadius(radius)
-                      .innerRadius(radius - 80);
-
-        d3.csv("browseruse.csv", function(error, data) {
-            if (error) {
-                throw error;
-            }
-            var arc = g.selectAll(".arc")
-                       .data(pie(data))
-                       .enter().append("g")
-                       .attr("class", "arc");
-
-            arc.append("path")
-               .attr("d", path)
-               .attr("fill", function(d) { return color(d.data.browser); });
-        
-            console.log(arc)
-        
-            arc.append("text")
-               .attr("transform", function(d) { 
-                        return "translate(" + label.centroid(d) + ")"; 
-                })
-               .text(function(d) { return d.data.browser; });
-            });
-
-            svg.append("g")
-               .attr("transform", "translate(" + (300) + "," 200 ")")
-               .append("text")
-               .text("北市票倉 - Jan 2017")
-               .attr("class", "title")
-    </script>
-</body>
-</html>
+function gear({teeth, radius, annulus}) {
+    const n = teeth;
+    let r2 = Math.abs(radius);
+    let r0 = r2 - toothRadius;
+    let r1 = r2 + toothRadius;
+    let r3 = holeRadius;
+    if (annulus) r3 = r0, r0 = r1, r1 = r3, r3 = r2 + toothRadius * 3;
+    const da = Math.PI / n;
+    let a0 = -Math.PI / 2 + (annulus ? Math.PI / n : 0);
+    const path = ["M", r0 * Math.cos(a0), ",", r0 * Math.sin(a0)];
+    let i = -1;
+    while (++i < n) { // TODO Template literal.
+      path.push(
+        "A", r0, ",", r0, " 0 0,1 ", r0 * Math.cos(a0 += da), ",", r0 * Math.sin(a0),
+        "L", r2 * Math.cos(a0), ",", r2 * Math.sin(a0),
+        "L", r1 * Math.cos(a0 += da / 3), ",", r1 * Math.sin(a0),
+        "A", r1, ",", r1, " 0 0,1 ", r1 * Math.cos(a0 += da / 3), ",", r1 * Math.sin(a0),
+        "L", r2 * Math.cos(a0 += da / 3), ",", r2 * Math.sin(a0),
+        "L", r0 * Math.cos(a0), ",", r0 * Math.sin(a0)
+      );
+    }
+    path.push("M0,", -r3, "A", r3, ",", r3, " 0 0,0 0,", r3, "A", r3, ",", r3, " 0 0,0 0,", -r3, "Z");
+    return path.join("");
+  }
