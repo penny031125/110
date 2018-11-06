@@ -1,11 +1,6 @@
-<body>
-<script>
-    var color = d3.scaleOrdinal(['#4daf4a','#377eb8','#ff7f00','#984ea3','#e41a1c']);
-    console.log(color(0))
-    console.log(color(1))
-    console.log(color(2))
-    console.log(color(3))
-    console.log(color(4))
-    console.log(color(5))
-</script>
-</body>
+browser,percent
+Chrome,73.70
+IE/Edge,4.90
+Firefox,15.40
+Safari,3.60
+Opera,1.00
